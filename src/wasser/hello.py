@@ -18,7 +18,7 @@ def main0():
         print()
 
 
-def _cost_fn(params: np.ndarray) -> float:
+def _h2o_cost(params: np.ndarray) -> float:
     """
     We're optimizing the H-H distance (a) and the (HH)-O distance (b).
 
@@ -53,18 +53,54 @@ def _cost_fn(params: np.ndarray) -> float:
     return e_h2o
 
 
-def main1():
-    print(_cost_fn(h_h_dist=1.8, h_o_dist=0.8))
-    print(_cost_fn(h_h_dist=1.2, h_o_dist=0.2))
+def _AsI_cost(params: np.ndarray) -> float:
+    """
+    We're optimizing the As-I distance.
+
+    ::
+
+    """
+    (dist,) = params
+
+    # O.x is at X = 0
+    # O.y is at Y = 0
+    # O.z is at Z = 0
+    as_geometry = "As 0 0 0"
+
+    # O.x is at X = a
+    # O.y is at Y = 0
+    # O.z is at Z = 0
+    i_geometry = f"I {dist} 0 0"
+
+    atom = f"{as_geometry}; {i_geometry}"
+
+    mol = gto.M(atom=atom, basis="ccpvdz")
+    rhf = scf.RHF(mol)
+    energy = rhf.kernel()
+
+    return energy
+
+
+# def main1():
+#     print(_h2o_cost(h_h_dist=1.8, h_o_dist=0.8))
+#     print(_h2o_cost(h_h_dist=1.2, h_o_dist=0.2))
 
 
 def main2():
     opt_result = optimize.minimize(
-        fun=_cost_fn,
+        fun=_h2o_cost,
         x0=np.array([2.0, 0.0]),
     )
     print(opt_result)
 
 
+def main3():
+    opt_result = optimize.minimize(
+        fun=_AsI_cost,
+        x0=np.array([1.0]),
+    )
+    print(opt_result)
+
+
 if __name__ == "__main__":
-    main2()
+    main3()
