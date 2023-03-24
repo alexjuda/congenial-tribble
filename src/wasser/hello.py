@@ -23,13 +23,12 @@ def _cost_fn(params: np.ndarray) -> float:
     We're optimizing the H-H distance (a) and the (HH)-O distance (b).
 
     ::
-          O
-          ▲
-          │
-          b
-          │
-          ▼
-      H◄──a──►H
+
+               O
+               ▲
+               │0.578
+               │
+      H◄───────┴─────1.5──►H
 
     """
     h_h_dist, h_o_dist = params
@@ -62,10 +61,9 @@ def main1():
 def main2():
     opt_result = optimize.minimize(
         fun=_cost_fn,
-        x0=np.array([2.0, 1.0]),
+        x0=np.array([2.0, 0.0]),
     )
     print(opt_result)
-    breakpoint()
 
 
 if __name__ == "__main__":
