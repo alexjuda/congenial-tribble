@@ -1,0 +1,14 @@
+# python bytecode
+*.pyc
+*.egg-info
+
+# test cache
+.hypothesis
+
+# venvs
+.python-version
+venv
+
+# macOS
+.DS_Store
+
