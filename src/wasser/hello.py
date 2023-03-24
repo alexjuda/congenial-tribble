@@ -1,4 +1,6 @@
+import numpy as np
 from pyscf import scf, gto
+from scipy import optimize
 
 
 def main0():
@@ -16,7 +18,7 @@ def main0():
         print()
 
 
-def _cost_fn(h_h_dist: float, h_o_dist: float) -> float:
+def _cost_fn(params: np.ndarray) -> float:
     """
     We're optimizing the H-H distance (a) and the (HH)-O distance (b).
 
@@ -30,6 +32,8 @@ def _cost_fn(h_h_dist: float, h_o_dist: float) -> float:
       H◄──a──►H
 
     """
+    h_h_dist, h_o_dist = params
+
     # O.x is at X = 0
     # O.y is (b)
     # O.z is at Z = 0
@@ -55,5 +59,14 @@ def main1():
     print(_cost_fn(h_h_dist=1.2, h_o_dist=0.2))
 
 
+def main2():
+    opt_result = optimize.minimize(
+        fun=_cost_fn,
+        x0=np.array([2.0, 1.0]),
+    )
+    print(opt_result)
+    breakpoint()
+
+
 if __name__ == "__main__":
-    main1()
+    main2()
