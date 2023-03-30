@@ -74,7 +74,7 @@ def _AsI_cost(params: np.ndarray) -> float:
 
     atom = f"{as_geometry}; {i_geometry}"
 
-    mol = gto.M(atom=atom, basis="ccpvdz")
+    mol = gto.M(atom=atom)
     rhf = scf.RHF(mol)
     energy = rhf.kernel()
 
@@ -100,6 +100,30 @@ def main3():
         x0=np.array([1.0]),
     )
     print(opt_result)
+
+
+def _NH4_cost(params: np.ndarray) -> float:
+    """
+    """
+    (dist,) = params
+
+    # O.x is at X = 0
+    # O.y is at Y = 0
+    # O.z is at Z = 0
+    as_geometry = "As 0 0 0"
+
+    # O.x is at X = a
+    # O.y is at Y = 0
+    # O.z is at Z = 0
+    i_geometry = f"I {dist} 0 0"
+
+    atom = f"{as_geometry}; {i_geometry}"
+
+    mol = gto.M(atom=atom)
+    rhf = scf.RHF(mol)
+    energy = rhf.kernel()
+
+    return energy
 
 
 if __name__ == "__main__":
